@@ -1,0 +1,4 @@
+#!/bin/sh
+
+clojure -e "(use 'ninety-nine) (run-tests)"
+
