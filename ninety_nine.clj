@@ -103,6 +103,21 @@
       (let [head (first ls), tail (rest ls)]
         (recur tail (concat result (if (coll? head) (my-flatten head) (list head))))))))
 
+(defn compress
+  "P08 (**) Eliminate consecutive duplicates of list elements.
+  If a list contains repeated elements they should be replaced with a single
+  copy of the element. The order of the elements should not be changed."
+  { :_test '(= (compress '(a a a a b c c a a d e e e e)) '(a b c a d e)) }
+
+  [lst]
+  (loop [ls lst, result []]
+    (if (empty? ls)
+      result
+      (recur (rest ls)
+             (if (= (first ls) (last result))
+               result
+               (conj result (first ls)))))))
+
 
 ;;
 ;; Generate tests from the functions' metadata
