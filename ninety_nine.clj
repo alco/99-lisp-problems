@@ -85,7 +85,12 @@
 ;;
 (defmacro gen-tests []
   `(do ~@(for [f (map first (ns-publics *ns*)) :when (:_test (meta (ns-resolve *ns* (symbol f))))]
-          `(clojure.test/deftest ~(symbol (str f '-test)) (clojure.test/is ~(:_test (meta (ns-resolve *ns* (symbol f)))))))))
+           (let [tests# (:_test (meta (ns-resolve *ns* (symbol f))))]
+             (if (vector? tests#)
+               `(do ~@(for [tst# (map-indexed (fn [i x] [i x]) tests#)]
+                        `(clojure.test/deftest ~(symbol (str f '-test- (first tst#))) (clojure.test/is ~(second tst#)))))
+               `(clojure.test/deftest ~(symbol (str f '-test)) (clojure.test/is ~tests#)))))))
+
 (gen-tests)
 
 
