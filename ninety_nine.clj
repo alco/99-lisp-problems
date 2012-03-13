@@ -138,6 +138,71 @@
                  (cons (cons head result-head) (rest result))
                  (cons (list head) result)))))))
 
+(defn encode
+  "P10 (*) Run-length encoding of a list.
+  Use the result of problem P09 to implement the so-called run-length encoding
+  data compression method. Consecutive duplicates of elements are encoded as
+  lists (N E) where N is the number of duplicates of the element E."
+  { :_test '(= (encode '(a a a a b c c a a d e e e e)) '((4 a) (1 b) (2 c) (2 a) (1 d) (4 e))) }
+
+  [lst]
+  (for [sublist (pack lst)] (list (my-count sublist) (first sublist))))
+
+
+(defn my-repeat
+  "A helper function similar to the built-in repeat.
+  Note that the built-in repeat is lazy and much more elegant."
+  { :_test '[(= (my-repeat 'a) '(a a))
+             (= (my-repeat 10 1) '(1 1 1 1 1 1 1 1 1 1))] }
+
+  ([a] (my-repeat 2 a))
+  ([n a] (for [i (range n)] a)))
+
+(defn encode-modified
+  "P11 (*) Modified run-length encoding.
+  Modify the result of problem P10 in such a way that if an element has no
+  duplicates it is simply copied into the result list. Only elements with
+  duplicates are transferred as (N E) lists."
+  { :_test '(= (encode-modified '(a a a a b c c a a d e e e e)) '((4 a) b (2 c) (2 a) d (4 e))) }
+
+  [lst]
+  (for [sublist (encode lst)] (let [[cnt elem] sublist] (if (= cnt 1) elem sublist))))
+
+(defn decode
+  "P12 (**) Decode a run-length encoded list.
+  Given a run-length code list generated as specified in problem P11. Construct
+  its uncompressed version."
+  { :_test '(= (decode '((4 a) b (2 c) (2 a) d (4 e))) '(a a a a b c c a a d e e e e)) }
+
+  [lst]
+  (loop [ls lst, result ()]
+    (if (empty? ls)
+      result
+      (recur (rest ls)
+             (if (list? (first ls))
+               (let [[cnt elem] (first ls)]
+                 (concat result (my-repeat cnt elem)))
+               (concat result (list (first ls))))))))
+
+; TODO: P13
+
+(defn dupli
+  "P14 (*) Duplicate the elements of a list."
+  { :_test '(= (dupli '(a b c c d)) '(a a b b c c c c d d)) }
+
+  [lst]
+  (loop [ls lst, result ()]
+    (if (empty? ls)
+      result
+      (recur (rest ls) (concat result (my-repeat 2 (first ls)))))))
+
+(defn repli
+  "P15 (**) Replicate the elements of a list a given number of times."
+  { :_test '(= (repli '(a b c) 3) '(a a a b b b c c c)) }
+
+  [lst n]
+  (apply concat (for [item lst] (my-repeat n item))))
+
 
 ;;
 ;; Generate tests from the functions' metadata
