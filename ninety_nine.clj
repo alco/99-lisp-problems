@@ -118,6 +118,28 @@
                result
                (conj result (first ls)))))))
 
+(defn pack
+  "P09 (**) Pack consecutive duplicates of list elements into sublists.
+  If a list contains repeated elements they should be placed in separate sublists."
+  { :_test '[(= (pack '(a a a a b c c a a d e e e e))
+                '((a a a a) (b) (c c) (a a) (d) (e e e e)))
+             (= (pack '(a b c d)) '((a) (b) (c) (d)))
+             (= (pack ()) ())
+             (= (pack '(a nil ())) '((a) (nil) (())))] }
+
+  [lst]
+  (loop [ls lst, result ()]
+    (if (empty? ls)
+      (my-reverse result)
+      (let [head (first ls),
+            result-head (first result)]
+        (recur (rest ls)
+               (if (= (first result-head) head)
+                 ; then: cons head into result-head
+                 (cons (cons head result-head) (rest result))
+                 ; else: cons new list into result
+                 (cons (list head) result)))))))
+
 
 ;;
 ;; Generate tests from the functions' metadata
