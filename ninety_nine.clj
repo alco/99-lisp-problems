@@ -135,9 +135,7 @@
             result-head (first result)]
         (recur (rest ls)
                (if (= (first result-head) head)
-                 ; then: cons head into result-head
                  (cons (cons head result-head) (rest result))
-                 ; else: cons new list into result
                  (cons (list head) result)))))))
 
 
