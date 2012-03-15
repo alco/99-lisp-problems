@@ -156,7 +156,7 @@
              (= (my-repeat 10 1) '(1 1 1 1 1 1 1 1 1 1))] }
 
   ([a] (my-repeat 2 a))
-  ([n a] (for [i (range n)] a)))
+  ([n a] (for [_ (range n)] a)))
 
 (defn encode-modified
   "P11 (*) Modified run-length encoding.
