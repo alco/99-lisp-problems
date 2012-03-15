@@ -203,6 +203,61 @@
   [lst n]
   (apply concat (for [item lst] (my-repeat n item))))
 
+(defn dropn
+  "P16 (**) Drop every N'th element from a list."
+  { :_test '(= (dropn '(a b c d e f g h i k) 3) '(a b d e g h k)) }
+
+  [lst n]
+  (loop [ls lst, cnt 0, result ()]
+    (if (empty? ls)
+      (my-reverse result)
+      (recur (rest ls)
+             (mod (inc cnt) n)
+             (if (= cnt (dec n))
+               result
+               (cons (first ls) result))))))
+
+(defn my-split-at
+  "P17 (*) Split a list into two parts; the length of the first part is given.
+  Do not use any predefined predicates."
+  { :_test '(= (my-split-at '(a b c d e f g h i k) 3)
+               '((a b c) (d e f g h i k))) }
+
+  [lst k]
+  (list (take k lst) (drop k lst)))
+
+(defn slice
+  "P18 (**) Extract a slice from a list.
+  Given two indices, I and K, the slice is the list containing the elements
+  between the I'th and K'th element of the original list (both limits
+  included). Start counting the elements with 1."
+  { :_test '(= (slice '(a b c d e f g h i k) 3 7)
+               '(c d e f g)) }
+
+  [lst i k]
+  (take (inc (- k i)) (drop (dec i) lst)))
+
+(defn rotate
+  "P19 (**) Rotate a list N places to the left."
+  { :_test '[(= (rotate '(a b c d e f g h) 3)
+                '(d e f g h a b c))
+             (= (rotate '(a b c d e f g h) -2)
+                '(g h a b c d e f))] }
+
+
+  [lst n]
+  (let [offset (if (pos? n) n (+ (count lst) n)),
+        [left right] (my-split-at lst offset)]
+    (concat right left)))
+
+(defn remove-at
+  "P20 (*) Remove the K'th element from a list."
+  { :_test '(= (remove-at '(a b c d) 2)
+               '(a c d)) }
+
+  [lst k]
+  (concat (take (dec k) lst) (drop k lst)))
+
 
 ;;
 ;; Generate tests from the functions' metadata
