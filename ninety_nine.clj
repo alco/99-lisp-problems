@@ -258,6 +258,39 @@
   [lst k]
   (concat (take (dec k) lst) (drop k lst)))
 
+(defn insert-at
+  "P21 (*) Insert an element at a given position into a list."
+  { :_test '(= (insert-at 'alfa '(a b c d) 2)
+               '(a alfa b c d)) }
+
+  [elem lst k]
+  (let [[left, right] (my-split-at lst (dec k))]
+    (concat left (list elem) right)))
+
+
+(defn abs [n] (if (pos? n) n (- n)))
+
+(defn my-range
+  "P22 (*) Create a list containing all integers within a given range."
+  { :_test '[(= (my-range 4 9) '(4 5 6 7 8 9))
+             (= (my-range 9 4) '(9 8 7 6 5 4))] }
+
+  [from to]
+  (let [step-fn (if (> from to) dec inc)]
+    (take (inc (abs (- from to))) (iterate step-fn from))))
+
+(defn rnd-select
+  "P23 (**) Extract a given number of randomly selected elements from a list."
+  ; TODO: think of a way to test this function
+  { :_test '(= (count (rnd-select '(a b c d e f g h) 3)) 3) }
+
+  [lst n]
+  (loop [ls lst]
+    (let [cnt (count ls)]
+      (if (= cnt n)
+        ls
+        (recur (remove-at ls (inc (rand-int cnt))))))))
+
 
 ;;
 ;; Generate tests from the functions' metadata
