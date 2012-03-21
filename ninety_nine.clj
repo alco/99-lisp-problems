@@ -246,7 +246,7 @@
 
 
   [lst n]
-  (let [offset (if (pos? n) n (+ (count lst) n)),
+  (let [offset (mod n (count lst)),
         [left right] (my-split-at lst offset)]
     (concat right left)))
 
