@@ -291,6 +291,21 @@
         ls
         (recur (remove-at ls (inc (rand-int cnt))))))))
 
+(defn lotto-select
+  "P24 (*) Lotto: Draw N different random numbers from the set 1..M."
+  { :_test '[(= 6 (count (lotto-select 6 49)))
+             (= (range 1 101) (sort (lotto-select 100 100)))] }
+
+  [n m]
+  (let [nums (my-range 1 m)]
+    (loop [ls nums, cnt 0, result []]
+      (if (= n cnt)
+        result
+        (let [index (rand-int (- m cnt))]
+          (recur (remove-at ls (inc index))
+                 (inc cnt)
+                 (conj result (nth ls index))))))))
+
 
 ;;
 ;; Generate tests from the functions' metadata
