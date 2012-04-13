@@ -13,7 +13,7 @@
   (condp = number
     1 false
     2 true
-    (let [divisors (range 2 (max 3 (bit-shift-right number 1)))]
+    (let [divisors (range 2 (max 3 (Math/round (Math/sqrt number))))]
       (not (some zero? (map #(rem number %) divisors))))))
 
 (defn gcd
